@@ -1,0 +1,28 @@
+{
+  "name": "ping",
+  "version": "0.1.0",
+  "description": "programme de ping",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "exit 0",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gaellebauvin/nodejs.git"
+  },
+  "author": "Gaelle Bauvin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gaellebauvin/nodejs/issues"
+  },
+  "homepage": "https://github.com/gaellebauvin/nodejs#readme",
+  "devDependencies": {
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "@types/debug": "^4.1.7",
+    "@types/node": "^16.11.6"
+  }
+}
