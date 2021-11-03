@@ -1,0 +1,44 @@
+body {
+    margin: 0;
+}
+
+#form {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    padding: 1%;
+    background-color: white;
+}
+
+#label_input {
+    display: none;
+}
+
+#input {
+    border : 1px solid #A2A2A2;
+    border-radius: 10px 0 0 10px;
+    padding : 1%;
+    width: 80%;
+}
+
+#btn {
+    border : 1px solid #A2A2A2;
+    border-left: none;
+    border-radius: 0 10px 10px 0;
+    padding: 1%;
+    width: 16%;
+}
+
+#messages p {
+    background-color: #1A62C3;
+    padding: 1%;
+    border-radius: 10px;
+    margin: 2%;
+    width: 40%;
+    color : white;
+}
+
+#messages {
+    margin-bottom: 6%;
+}

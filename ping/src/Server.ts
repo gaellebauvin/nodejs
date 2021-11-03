@@ -78,15 +78,18 @@ export interface IServer {
 }
 
 export class Server implements IServer {
-     net = require('net');
+    net : string[]
+
     constructor(net : string[]) {
         this.net = net
-        this.net.createServer()
+        net.createServer()
     };
 
     close(){
         console.log('Server closed !');
     }
+
+    listeningPort : number = 8024
 
     listen(){
       if( this.listeningPort === 8024){
