@@ -5,10 +5,15 @@ body {
 #form {
     position: fixed;
     bottom: 0;
-    width: 100%;
+    right: 0;
+    width: 77%;
     display: flex;
     padding: 1%;
     background-color: white;
+}
+
+.conversation {
+    width: 80%;
 }
 
 #label_input {
@@ -39,6 +44,30 @@ body {
     color : white;
 }
 
-#messages {
-    margin-bottom: 6%;
+.two_columns {
+    display: flex;
+    height: 100vh;
+}
+
+.all_rooms {
+    width: 20%;
+    background-color: darkgray;
+    height: 100vh;
+}
+
+.profil{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: #3B3B3B;
+    margin: 9% 7%;
+}
+
+.room {
+    display: flex;
+    align-items: center;
+}
+
+#utilisateur p {
+    color : white;
 }

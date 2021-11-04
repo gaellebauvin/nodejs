@@ -78,22 +78,45 @@ export interface IServer {
 }
 
 export class Server implements IServer {
-    net : string[]
+    readonly listeningPort : number
+    server : net.Server
 
-    constructor(net : string[]) {
-        this.net = net
-        net.createServer()
+    constructor(config:IServerConfig) {
+        this.listeningPort = config.listeningPort
+        this.server = net.createServer();
+
+        if (config.log) {
+            this.log = config.log;
+        }
+
+        if (config.error) {
+            this.error = config.error;
+        }
+
+        this.onData = config.onData;
+        this.server.on('connection', (socket) => {
+            this.log(`connection ${socket.remoteAddress}`);
+            socket.on('data', (data) => {
+                this.onData(socket, 'data');
+            })
+
+            socket.on('error', (err: any) => this.error(err))
+        });
+    };
+
+    log(...args: any[]): void {
+        console.log(args);
+    };
+
+    error(...args: any[]): void {
+        console.error(args);
     };
 
     close(){
-        console.log('Server closed !');
+        this.server.close();
     }
 
-    listeningPort : number = 8024
-
     listen(){
-      if( this.listeningPort === 8024){
-          console.log('server bound');
-      }
+        this.server.listen(this.listeningPort);
     }
 }
