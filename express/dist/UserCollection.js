@@ -1,14 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Users = void 0;
-var User_1 = require("./User");
 var Users = /** @class */ (function () {
     function Users() {
         this._users = {};
         this._ids = [];
         this._nextId = 0;
-        var user = new User_1.User({ id: "2", pseudo: "toto", collection: this });
-        this.add(user);
     }
     Object.defineProperty(Users.prototype, "all", {
         get: function () { return this._ids; },

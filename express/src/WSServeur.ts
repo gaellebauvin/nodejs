@@ -82,7 +82,33 @@ export class WSServer implements IWSServer {
 
         this.server.on("connection", (socket:Socket) => {
             console.log("Un utilisateur s'est connecté")
-            socket.emit("log", `${this.onlineUsers.get("2")}`)
+
+            const user = new User({
+                id:socket.id,
+                pseudo: "Toto",
+                collection:this.onlineUsers,
+            })
+
+            this.onlineUsers.add(user);
+
+            const userList = this.onlineUsers.all;
+            console.log(userList);
+
+            socket.emit("userList", userList);
+            socket.broadcast.emit("userList", userList);
+
+            socket.on("disconnect", (reason: string) => {
+                console.log("utilisateur déconnecté")
+
+                if (reason) {
+                    console.log(`pour la raison suivante ${reason}`)
+                }
+                this.onlineUsers.del(socket.id)
+                const userList = this.onlineUsers.all;
+                socket.emit("userList", userList);
+                socket.broadcast.emit("userList", userList);
+                const userpseudo = this.onlineUsers.get(socket.id);
+            })
 
             socket.on("chat", (reason : string) => {
                 console.log("Utilisateur déconnecté")

@@ -42,10 +42,6 @@ export class Users implements IUserCollection {
         this._users = {}
         this._ids = []
         this._nextId = 0
-
-        const user = new User({id: "2", pseudo : "toto", collection : this} )
-
-        this.add(user);
     }
 
     get all (): Array<string> { return this._ids }

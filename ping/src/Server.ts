@@ -25,7 +25,7 @@ export interface IServerConfig {
      *
      * @memberof IServerConfig
      */
-    readonly onData: (data: string) => void
+    readonly onData: (socket: net.Socket, data: string) => void
 }
 
 export interface IServer {
@@ -74,35 +74,38 @@ export interface IServer {
      * @type { Function }
      * @memberof IServer
      */
-    readonly onData: (data: string) => void
+    readonly onData: (connexion: net.Socket, data: string) => void
 }
 
 export class Server implements IServer {
-    readonly listeningPort : number
-    server : net.Server
 
-    constructor(config:IServerConfig) {
-        this.listeningPort = config.listeningPort
-        this.server = net.createServer();
+        readonly listeningPort: number;
+        server: net.Server;
 
-        if (config.log) {
-            this.log = config.log;
-        }
+        constructor(config: IServerConfig) {
+            this.listeningPort = config.listeningPort;
+            this.onData = config.onData;
 
-        if (config.error) {
-            this.error = config.error;
-        }
+            if (config.log) {
+                this.log = config.log;
+            }
+            if (config.error) {
+                this.error = config.error;
+            }
 
-        this.onData = config.onData;
-        this.server.on('connection', (socket) => {
-            this.log(`connection ${socket.remoteAddress}`);
-            socket.on('data', (data) => {
-                this.onData(socket, 'data');
-            })
+            this.server = net.createServer();
+            this.server.on('connection', (socket) => {
+                this.log(`Connexion ${socket.remoteAddress}`);
 
-            socket.on('error', (err: any) => this.error(err))
-        });
-    };
+                socket.on('data', (data) => {
+                    this.onData(socket, data.toString());
+                })
+                socket.on('end', () => { this.log(`Déconnexion ${socket.remoteAddress}`) });
+
+                socket.on('error', (err: any) => this.error(err))
+            });
+
+        };
 
     log(...args: any[]): void {
         console.log(args);
