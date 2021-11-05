@@ -56,6 +56,7 @@ export class Rooms implements IRoomCollection {
     add(room: IRoom):void {
         if(!(room.id in this._rooms)){
             this._ids.push(room.id)
+            this._rooms[room.id] = room
         }
     }
 

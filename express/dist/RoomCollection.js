@@ -22,6 +22,7 @@ var Rooms = /** @class */ (function () {
     Rooms.prototype.add = function (room) {
         if (!(room.id in this._rooms)) {
             this._ids.push(room.id);
+            this._rooms[room.id] = room;
         }
     };
     Rooms.prototype.del = function (id) {

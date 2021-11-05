@@ -5,8 +5,7 @@ body {
 #form {
     position: fixed;
     bottom: 0;
-    right: 0;
-    width: 77%;
+    width: 78%;
     display: flex;
     padding: 1%;
     background-color: white;
@@ -50,7 +49,7 @@ body {
 }
 
 .all_rooms {
-    width: 20%;
+    width: 10%;
     background-color: darkgray;
     height: 100vh;
 }
@@ -68,6 +67,12 @@ body {
     align-items: center;
 }
 
-#utilisateur p {
+.utilisateur p {
     color : white;
+}
+
+.all_utilisateurs {
+    width: 10%;
+    background-color: darkgray;
+    height: 100vh;
 }

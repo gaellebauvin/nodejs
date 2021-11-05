@@ -8,11 +8,8 @@
 <body>
 
 <div class="two_columns">
-    <div class="all_rooms">
-        <div class="room">
-            <div class="profil"></div>
-            <div class="utilisateur"></div>
-        </div>
+    <div class="all_rooms" id="utilisateur">
+
     </div>
 
     <div class="conversation">
@@ -22,9 +19,14 @@
             <button id="btn"> Envoyer</button>
         </form>
     </div>
+
+    <div class="all_utilisateurs">
+
+    </div>
 </div>
 
 <script src="socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     var socket = io();
     var messages = document.getElementById("messages");
@@ -41,14 +43,28 @@
     });
 
     socket.on('chat', function (msg) {
+        console.log('toto')
         var item = document.createElement('p');
         item.textContent = msg;
         messages.appendChild(item);
         window.scrollTo(0, document.body.scrollHeight)
     });
 
-    socket.on('userList', function (list){
-        console.log(list);
+    socket.on('logged', function (users){
+        for(let i=0; i< users.length; i++) {
+            let user = users[i]
+            $('#utilisateur').append( "<div class=\"room\" style='display: flex;\n" +
+                "    align-items: center;'>\n" +
+                "            <div class=\"profil\" style='width: 70px;\n" +
+                "    height: 70px;\n" +
+                "    border-radius: 50%;\n" +
+                "    background: #3B3B3B;\n" +
+                "    margin: 9% 7%;'></div>\n" +
+                "            <div class=\"utilisateur\"> <p>" + user.pseudo +
+                "</p></div>\n" +
+                "        </div>"
+        )
+        }
     })
 </script>
 </body>

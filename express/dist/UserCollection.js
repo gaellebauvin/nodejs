@@ -20,8 +20,9 @@ var Users = /** @class */ (function () {
         return false;
     };
     Users.prototype.add = function (user) {
-        if (!(user.id in this._users)) {
+        if (!(user.id in this._users) && (this._ids.indexOf(user.id) == -1)) {
             this._ids.push(user.id);
+            this._users[user.id] = user;
         }
     };
     Users.prototype.del = function (id) {
