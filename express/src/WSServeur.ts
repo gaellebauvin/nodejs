@@ -7,6 +7,8 @@ import {
 import {IUserCollection, Users} from "./UserCollection";
 import {IUser, User} from "./User";
 import {IRoomCollection, Rooms} from "./RoomCollection";
+import {Room} from "./Room";
+import {v4 as uuidv4} from "uuid";
 
 
 export interface IWSServerConfig {
@@ -74,17 +76,20 @@ export class WSServer implements IWSServer {
     server : SocketIOServer
     rooms : IRoomCollection
     onlineUsers : IUserCollection
+    room : Room
 
     constructor(config:IWSServerConfig) {
         this.server = new SocketIOServer(config.httpSrv)
         this.onlineUsers = new Users()
         this.rooms = new Rooms()
+        this.room = new Room({id : uuidv4(), title:'Room1', usersCollection: this.onlineUsers})
+        this.rooms.add(this.room)
 
         this.server.on("connection", (socket:Socket) => {
             console.log("Un utilisateur s'est connecté")
 
             const user = new User({
-                id:socket.id,
+                id:uuidv4(),
                 pseudo: "Toto",
                 collection:this.onlineUsers,
             })
@@ -103,11 +108,11 @@ export class WSServer implements IWSServer {
                 if (reason) {
                     console.log(`pour la raison suivante ${reason}`)
                 }
-                this.onlineUsers.del(socket.id)
+                this.onlineUsers.del(uuidv4())
                 const userList = this.onlineUsers.all;
                 socket.emit("userList", userList);
                 socket.broadcast.emit("userList", userList);
-                const userpseudo = this.onlineUsers.get(socket.id);
+                const userpseudo = this.onlineUsers.get(uuidv4());
             })
 
             socket.on("chat", (reason : string) => {
@@ -120,12 +125,31 @@ export class WSServer implements IWSServer {
                 console.log(`message du canal chat :"${msg}"`)
                 socket.emit("chat", `${msg}`)
             })
+
+            socket.on('_handleRooms', (selectedRoom: string) => this._handleRooms(socket, selectedRoom))
         })
+
 
         const port: number = 3000
             config.httpSrv.listen(port, () => {
                 console.log(`Serveur en écoute sur ${port} ....`)
             })
+    }
+
+    private _handleRooms(socket:Socket, selectedRoom:string):void {
+        let room = this.rooms.get(selectedRoom);
+        let user = this.onlineUsers.get(socket.id)
+
+        if(room && user){
+            room.joinUser(user.id);
+            socket.join(room.id);
+            socket.emit('initUsers', room.joinedUsers.map((id: string) => {
+                let user = this.onlineUsers.get(id)
+                if(user){
+                    return {id:user.id, pseudo:user.pseudo, imgUrl: user.imgUrl}
+                }
+            }))
+        }
     }
 
 }
